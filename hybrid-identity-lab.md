@@ -107,3 +107,87 @@ The deployment process uses an unattended install with the following key setting
 <img width="622" height="590" alt="Screenshot 2025-11-13 195705" src="https://github.com/user-attachments/assets/9959f0ba-9140-4b80-88ff-6261e8aae1a0" />
 
 
+---
+
+### **6. Active Directory Structure (User Accounts)**
+
+* **Organizational Unit (OU) Created:** The **`User Accounts`** OU was created directly under the domain root (`KevinFraserLab.com`). This dedicated OU ensures the structure is ready for precise Group Policy linking and simplified filtering for Microsoft Entra Connect synchronization.
+
+<img width="1625" height="792" alt="Screenshot 2025-11-13 200649" src="https://github.com/user-attachments/assets/c26a07df-43a9-4188-b2e1-b0fa7f3ec4bc" />
+
+
+* **Test Users Created:** Two test user accounts, **`TestUser1`** and **`TestUser2`**, were created and placed within the new **`User Accounts`** OU.
+
+<img width="1414" height="750" alt="Screenshot 2025-11-13 201113" src="https://github.com/user-attachments/assets/aca13b51-52c6-41e3-ad2c-d66209afee70" />
+
+
+---
+
+### **7. Group Policy Management: Advanced User Desktop Policy** 🖼️
+
+The first GPO was implemented to enforce corporate desktop standards, display dynamic user context, and secure the desktop environment against user modifications.
+
+* **GPO Name:** `User Profile Settings`
+* **GPO Scope:** Linked to the **`Users`** OU.
+* **Wallpaper Deployment:** Configured via a **User Logon Script** (`set_bg.bat`) running from **NETLOGON** to execute **BGInfo.exe** silently, displaying dynamic information (e.g., user name, IP address) on the desktop background.
+* **Desktop Restrictions:**
+    * **User Configuration** policies were applied to prevent changing the desktop background.
+    * Additional policies were set to **lock down desktop personalization** and prevent users from accessing system settings (e.g., Registry Editor, specific Control Panel applets).
+* **Verification:** Confirmed dynamic wallpaper applied and desktop personalization was fully restricted.
+
+<img width="1915" height="1026" alt="Screenshot 2025-11-14 010648" src="https://github.com/user-attachments/assets/7792f71e-3fd0-46c0-8545-b692615d81a9" />
+
+<img width="1028" height="780" alt="Screenshot 2025-11-14 010823" src="https://github.com/user-attachments/assets/07827dfd-7e06-47f7-806f-d8c2894e8734" />
+
+---
+
+### **8. Group Policy Management: Secure User Data Redirection** 🔒
+
+The second GPO was implemented for data security, redirecting essential user folders to a centralized, secure server share.
+
+* **GPO Name:** `User Data Redirection`
+* **GPO Scope:** Linked to the **`Users`** OU.
+* **Server Share:** `\\WDS\UserData$` was created on the WDS server.
+* **NTFS Permissions:** Configured with granular security to grant **Authenticated Users** only the necessary rights to **create folders** but not read other users' data (granting the user **exclusive rights** to their redirected folder).
+* **Redirection Target:** `Documents` and `Desktop` folders.
+* **Verification:** Confirmed files saved to Desktop/Documents followed the user across client machines and were stored on the `\\WDS\UserData$` share.
+
+<img width="793" height="537" alt="Screenshot 2025-11-13 233719" src="https://github.com/user-attachments/assets/59781fdd-a920-4380-a082-46b92d64de9d" />
+
+<img width="1023" height="771" alt="Screenshot 2025-11-14 011049" src="https://github.com/user-attachments/assets/006211d0-d825-4558-9afb-9696c7603370" />
+
+<img width="1216" height="652" alt="Screenshot 2025-11-14 011006" src="https://github.com/user-attachments/assets/5d4579c8-885a-48c0-aefc-8af70106bd3d" />
+
+
+---
+
+### **9. Active Directory Structure Optimization** 💡
+
+The default Active Directory structure was reorganized for clean GPO linking and professional management practices.
+
+* **Final OU Structure:** Computer objects were moved from the default **Computers** container into dedicated OUs under a single organizational root (e.g., `$KevinFraserLab`):
+    * `$KevinFraserLab` $\rightarrow$ **`Devices`** $\rightarrow$ **`Client Devices`** (for client PCs).
+    * `$KevinFraserLab` $\rightarrow$ **`Devices`** $\rightarrow$ **`Servers`** (for WDS, DC, etc.).
+* **Rationale:** This structure allows **GPO linking** to be precise (e.g., client software GPOs only link to **`Client Devices`**) without using complex Security Filtering.
+
+<img width="449" height="511" alt="Screenshot 2025-11-14 011500" src="https://github.com/user-attachments/assets/4cd56eb8-1677-457c-a19e-ddac20642edd" />
+
+---
+
+### **10. Group Policy Management: Software Deployment** 📦
+
+The final GPO was configured for mandatory, silent software installation using the optimized Computer OU structure.
+
+* **GPO Name:** `GPO_Software_7Zip` (or similar).
+* **GPO Scope:** Linked directly to the **`Client Devices`** OU.
+* **Software Distribution Point:** The MSI file was placed in the central, accessible **SYSVOL** share: `\\DC\SYSVOL\KevinFraserLab.com\SoftwareDeploy\7zip.msi`.
+* **Configuration:** **Computer Configuration** $\rightarrow$ **Software Settings** $\rightarrow$ **Software Installation** was configured with the package set to **Assigned**.
+* **Verification:** Confirmed successful installation on the client machine following a forced GPO update and **Reboot** (installation occurs during computer startup).
+
+<img width="1081" height="559" alt="Screenshot 2025-11-14 011805" src="https://github.com/user-attachments/assets/9db77a47-1aad-401e-a561-81229c3e280f" />
+
+<img width="1028" height="770" alt="Screenshot 2025-11-14 011913" src="https://github.com/user-attachments/assets/6fbb3e0b-90c1-4775-b67d-77482cbe74a9" />
+
+
+
+
