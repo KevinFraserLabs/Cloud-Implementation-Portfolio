@@ -181,12 +181,14 @@ The final GPO was configured for mandatory, silent software installation using t
 * **GPO Name:** `GPO_Software_7Zip` (or similar).
 * **GPO Scope:** Linked directly to the **`Client Devices`** OU.
 * **Software Distribution Point:** The MSI file was placed in the central, accessible **SYSVOL** share: `\\DC\SYSVOL\KevinFraserLab.com\SoftwareDeploy\7zip.msi`.
-* **Configuration:** **Computer Configuration** $\rightarrow$ **Software Settings** $\rightarrow$ **Software Installation** was configured with the package set to **Assigned**.
+* **Configuration:** **Computer Configuration** $\rightarrow$ **Software Settings** $\rightarrow$ **Software Installation** was configured with the package set to **Assigned** and **Enforced**.
 * **Verification:** Confirmed successful installation on the client machine following a forced GPO update and **Reboot** (installation occurs during computer startup).
 
 <img width="1081" height="559" alt="Screenshot 2025-11-14 011805" src="https://github.com/user-attachments/assets/9db77a47-1aad-401e-a561-81229c3e280f" />
 
 <img width="1028" height="770" alt="Screenshot 2025-11-14 011913" src="https://github.com/user-attachments/assets/6fbb3e0b-90c1-4775-b67d-77482cbe74a9" />
+
+
 
 
 
