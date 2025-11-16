@@ -189,6 +189,61 @@ The final GPO was configured for mandatory, silent software installation using t
 <img width="1028" height="770" alt="Screenshot 2025-11-14 011913" src="https://github.com/user-attachments/assets/6fbb3e0b-90c1-4775-b67d-77482cbe74a9" />
 
 
+## **11. Cloud Identity Integration: Microsoft Entra Connect** ☁️
+
+The synchronization software was installed directly on the **Domain Controller** (`DC` - `192.168.2.2`) to facilitate the hybrid identity infrastructure, synchronizing the on-premises Active Directory with Microsoft Entra ID (formerly Azure AD).
+
+* **Installation Location:** Domain Controller (DC - `192.168.2.2`)
+* **Software:** Installed the latest version of **Microsoft Entra Connect**.
+* **Synchronization Configuration:**
+    * **Authentication Method:** Configured for **Password Hash Synchronization (PHS)**.
+    * **Synchronization Scope:** Set to synchronize the entire `KevinFraserLab.com` forest, specifically including the **`User Accounts`** OU for identity and the **`Client Devices`** OU for device objects.
+* **Verification:**
+    * Confirmed both **`TestUser1`** and **`TestUser2`** accounts appeared in the Microsoft Entra admin center with **"Windows Server AD"** as the source.
+
+---
+
+### **12. Hybrid Entra ID Join and Group Writeback** 🤝
+
+The Entra Connect configuration was extended to enable **Hybrid Entra ID Join (HAADJ)** for devices and **Group Writeback** for cloud-created groups.
+
+* **Service Connection Point (SCP):** The Entra Connect wizard successfully configured the Service Connection Point (SCP) within the on-premises Active Directory.
+* **Group Writeback:** Confirmed the writeback feature was enabled and successfully synchronized groups created in Entra ID back to the on-premises Active Directory.
+* **Device Verification:**
+    * After an AD synchronization cycle and client restart, both **`Windows1`** and **`Windows2`** successfully registered their identity with Entra ID.
+    * Devices appeared in the Microsoft Entra admin center with a **Join Type** of **"Hybrid Azure AD Joined"**.
+
+---
+
+### **13. Intune Enrollment Prerequisites and GPO Fixes** 🛡️
+
+Settings were configured in the cloud to allow enrollment, and the critical GPO processing fix was implemented on-premises.
+
+* **MDM User Scope:** Configured in the Microsoft Entra admin center under **Mobility (MDM and MAM)** to set the **MDM User Scope** to **"All"**, ensuring all licensed users can auto-enroll.
+* **Licensing:** An **Enterprise Mobility + Security E5** license was assigned to **`TestUser1`** (and **`TestUser2`** for testing) to meet the Intune management requirement.
+* **GPO Timing Fix (Critical):** The **`Always wait for the network at computer startup and logon`** GPO was **Enabled** within the **Default Domain Policy** to prevent GPO failure due to network initialization timing issues.
+
+---
+
+### **14. Group Policy Management: Automatic Intune Enrollment** ☁️
+
+The GPO was configured to initiate the successful automatic enrollment of domain-joined devices into Microsoft Intune.
+
+* **GPO Name:** `GPO_Intune_AutoEnroll`
+* **GPO Scope:** Linked directly to the **`Client Devices`** OU.
+* **Policy Path:** **Computer Configuration** $\rightarrow$ **Policies** $\rightarrow$ **Administrative Templates** $\rightarrow$ **Windows Components** $\rightarrow$ **MDM**
+* **Configuration:** The setting **`Enable automatic MDM enrollment using default Azure AD credentials`** was set to **Enabled** with the credential type set to **`User Credential`**. The **MDM Application ID** was correctly left **blank**.
+
+---
+
+### **15. Current Status (Client Identity Failure)** 🛑
+
+*The final enrollment is currently failing due to a client authentication error, blocking the acquisition of the Primary Refresh Token (PRT) and subsequent Intune enrollment. This will be resolved in the next session.*
+
+* **Status:** The client is Hybrid Joined, but **AzureAdPrt: NO** and **MdmUrl: blank**.
+* **Key Error:** The device is authenticating against the **unverified** `.onmicrosoft.com` domain instead of the synchronized custom domain, resulting in a **`Tenant 'kevinfraserlab.onmicrosoft.com' not found`** error.
+
+
 
 
 
