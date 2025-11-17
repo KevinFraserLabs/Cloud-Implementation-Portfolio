@@ -1,4 +1,4 @@
-## 🚀 On-Premises Simulation with Cloud Migration
+## 🚀 Hybrid Identity and Endpoint Management: On-Premises to Microsoft Intune 🚀
 
 This document outlines the foundation build of the on-premises network, domain, and deployment infrastructure.
 
