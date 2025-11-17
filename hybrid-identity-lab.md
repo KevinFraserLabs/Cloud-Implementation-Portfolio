@@ -111,12 +111,12 @@ The deployment process uses an unattended install with the following key setting
 
 ### **6. Active Directory Structure (User Accounts)**
 
-* **Organizational Unit (OU) Created:** The **`User Accounts`** OU was created directly under the domain root (`KevinFraserLab.com`). This dedicated OU ensures the structure is ready for precise Group Policy linking and simplified filtering for Microsoft Entra Connect synchronization.
+* **Organizational Unit (OU) Created:** The **`Users`** OU was created directly under the domain root (`KevinFraserLab.com`). This dedicated OU ensures the structure is ready for precise Group Policy linking and simplified filtering for Microsoft Entra Connect synchronization.
 
 <img width="1625" height="792" alt="Screenshot 2025-11-13 200649" src="https://github.com/user-attachments/assets/c26a07df-43a9-4188-b2e1-b0fa7f3ec4bc" />
 
 
-* **Test Users Created:** Two test user accounts, **`TestUser1`** and **`TestUser2`**, were created and placed within the new **`User Accounts`** OU.
+* **Test Users Created:** Two test user accounts, **`TestUser1`** and **`TestUser2`**, were created and placed within the new **`Users`** OU.
 
 <img width="1414" height="750" alt="Screenshot 2025-11-13 201113" src="https://github.com/user-attachments/assets/aca13b51-52c6-41e3-ad2c-d66209afee70" />
 
