@@ -201,6 +201,11 @@ The synchronization software was installed directly on the **Domain Controller**
 * **Verification:**
     * Confirmed both **`TestUser1`** and **`TestUser2`** accounts appeared in the Microsoft Entra admin center with **"Windows Server AD"** as the source.
 
+<img width="397" height="470" alt="Screenshot 2025-11-17 064748" src="https://github.com/user-attachments/assets/a2f13238-78a4-4532-bddd-b2a444fc5a87" />
+
+<img width="1878" height="830" alt="Screenshot 2025-11-17 064840" src="https://github.com/user-attachments/assets/76ebe491-94aa-4c52-aa89-5942bfb6a1e6" />
+
+
 ---
 
 ### **12. Hybrid Entra ID Join and Group Writeback** 🤝
@@ -213,15 +218,23 @@ The Entra Connect configuration was extended to enable **Hybrid Entra ID Join (H
     * After an AD synchronization cycle and client restart, both **`Windows1`** and **`Windows2`** successfully registered their identity with Entra ID.
     * Devices appeared in the Microsoft Entra admin center with a **Join Type** of **"Hybrid Azure AD Joined"**.
 
+
+<img width="1117" height="622" alt="Screenshot 2025-11-17 064911" src="https://github.com/user-attachments/assets/e299e0cf-73f8-4608-8a69-b00cda5c30a7" />
+
 ---
 
 ### **13. Intune Enrollment Prerequisites and GPO Fixes** 🛡️
 
-Settings were configured in the cloud to allow enrollment, and the critical GPO processing fix was implemented on-premises.
+Settings were configured in the cloud to allow enrollment.
 
 * **MDM User Scope:** Configured in the Microsoft Entra admin center under **Mobility (MDM and MAM)** to set the **MDM User Scope** to **"All"**, ensuring all licensed users can auto-enroll.
 * **Licensing:** An **Enterprise Mobility + Security E5** license was assigned to **`TestUser1`** (and **`TestUser2`** for testing) to meet the Intune management requirement.
 * **GPO Timing Fix (Critical):** The **`Always wait for the network at computer startup and logon`** GPO was **Enabled** within the **Default Domain Policy** to prevent GPO failure due to network initialization timing issues.
+
+<img width="1181" height="791" alt="Screenshot 2025-11-17 065310" src="https://github.com/user-attachments/assets/887b2ff5-a9cf-44de-82bd-6b68209f2b19" />
+
+<img width="1063" height="744" alt="Screenshot 2025-11-17 065505" src="https://github.com/user-attachments/assets/89a59f8e-7b1e-42a6-849a-6aa92e3eda42" />
+
 
 ---
 
@@ -229,22 +242,36 @@ Settings were configured in the cloud to allow enrollment, and the critical GPO 
 
 The GPO was configured to initiate the successful automatic enrollment of domain-joined devices into Microsoft Intune.
 
-* **GPO Name:** `GPO_Intune_AutoEnroll`
+* **GPO Name:** `Intune AutoEnroll`
 * **GPO Scope:** Linked directly to the **`Client Devices`** OU.
 * **Policy Path:** **Computer Configuration** $\rightarrow$ **Policies** $\rightarrow$ **Administrative Templates** $\rightarrow$ **Windows Components** $\rightarrow$ **MDM**
 * **Configuration:** The setting **`Enable automatic MDM enrollment using default Azure AD credentials`** was set to **Enabled** with the credential type set to **`User Credential`**. The **MDM Application ID** was correctly left **blank**.
 
+<img width="1907" height="775" alt="Screenshot 2025-11-17 065839" src="https://github.com/user-attachments/assets/724c5dac-7320-47cf-98ab-4c6f0ca7da0f" />
+
 ---
 
-### **15. Current Status (Client Identity Failure)** 🛑
 
-*The final enrollment is currently failing due to a client authentication error, blocking the acquisition of the Primary Refresh Token (PRT) and subsequent Intune enrollment. This will be resolved in the next session.*
+### **15. Verification: Intune Enrollment and Management** ✅
 
-* **Status:** The client is Hybrid Joined, but **AzureAdPrt: NO** and **MdmUrl: blank**.
-* **Key Error:** The device is authenticating against the **unverified** `.onmicrosoft.com` domain instead of the synchronized custom domain, resulting in a **`Tenant 'kevinfraserlab.onmicrosoft.com' not found`** error.
+This section confirms the successful automatic enrollment of the client devices into **Microsoft Intune**, completing the Hybrid Entra ID Join (HAADJ) and Intune co-management setup.
+
+* **Intune Enrollment Status:** After a client reboot and user sign-in (using a licensed account like **`TestUser1`**), both **`Windows1`** and **`Windows2`** devices successfully completed the MDM auto-enrollment process.
+* **Verification (Client-Side):**
+    * **Access Work or School:** Confirmed the devices show a successful connection to **`KevinFraserLab.com`**'s work or school account, managed by **Microsoft Intune**.
+    * **Command Prompt:** Running the command `dsregcmd /status` confirms both **`AzureAdJoined: YES`** and **`MdmManaged`** is populated (indicating Intune enrollment).
+
+<img width="588" height="179" alt="Screenshot 2025-11-17 070251" src="https://github.com/user-attachments/assets/35c3aff6-9a62-48a6-84f1-94febb33c9a3" />
+<img width="735" height="220" alt="Screenshot 2025-11-17 070319" src="https://github.com/user-attachments/assets/424129d1-df40-43d0-8abc-f3568145fa00" />
 
 
+* **Verification (Intune Portal):**
+    * The devices appeared in the **Microsoft Intune admin center** under **Devices** → **All devices**.
+    * The **Managed by** column is confirmed as **"Intune"**.
+    * The **Primary user** is correctly listed as the signed-in user (**`TestUser1`** or **`TestUser2`**).
+    * The **Compliance** status is **"Compliant"**.
 
+<img width="735" height="220" alt="Screenshot 2025-11-17 070319" src="https://github.com/user-attachments/assets/f8c19b3a-894f-4400-954a-b888cabf8632" />
 
 
 
