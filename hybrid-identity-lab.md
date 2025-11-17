@@ -276,3 +276,97 @@ This section confirms the successful automatic enrollment of the client devices 
 <img width="1826" height="609" alt="Screenshot 2025-11-17 071739" src="https://github.com/user-attachments/assets/dfe3bca9-9365-46f0-8f51-e58d58bc1375" />
 
 
+---
+
+### **Preparation for Cloud Policy Assignment** ⚙️
+
+To ensure clean and precise policy targeting, administrative **Security Groups** were created in Microsoft Entra ID based on function:
+
+* **Device Group:** **`Client Devices`** (Used for policies targeting the machine, containing device objects `Windows1`and `Windows2`).
+* **User Group:** **`Users`** (Created specifically for assigning user-centric policies, containing user objects like `TestUser1` and `TestUser2`).
+
+---
+
+### **16. Cloud-Native Security Baseline and Configuration** 🛡️
+
+With the client devices fully MDM-managed, governance was migrated from GPOs to Intune-deployed policies.
+
+#### **A. Intune Device Compliance Policy (Security Baseline)**
+
+A robust compliance policy was implemented, assigned to the **`Client Devices`** security group, to enforce a multi-layered Zero Trust security baseline.
+
+* **Policy Name:** `Security_Baseline_Workstations`
+* **Assignment:** Targeted the **`Client Devices`** security group (containing device objects).
+* **Key Requirements Enforced (All set to 'Require'):**
+    * **Hardware Integrity (Device Health):** `Secure Boot` and `Code Integrity` to ensure a trusted boot environment.
+    * **Data Protection (System Security):** `Require encryption of data storage on device` (BitLocker).
+    * **Endpoint Protection (System Security):** `Firewall`, `Trusted Platform Module (TPM)`, `Antivirus`, and `Antispyware`.
+    * **Threat Detection (Defender):** `Antimalware`, `Real-time monitoring`, and `Antimalware security intelligence up-to-date`.
+    * **Risk-Based Access (MDE):** `Require the device to be at or under the machine risk score` set to **Low**.
+* **Action for Non-Compliance:** Configured to immediately mark the device non-compliant and **send an email notification** to the end-user.
+* **Verification:** The devices reported **"Compliant"** in the Intune admin center.
+
+<img width="1200" height="700" alt="Screenshot of Intune Compliance Policy requiring all security settings" src=""/>
+
+#### **B. Intune Configuration Profile (GPO Replacement)**
+
+A Configuration Profile using the **Settings Catalog** was deployed to demonstrate the replacement of traditional GPOs with cloud-native policy management.
+
+* **Policy Name:** `Config_User_Desktop_Lockdown`
+* **Assignment:** Targeted the **`Test Users`** security group (containing user objects).
+* **Key Setting:** **Prevent changing theme** was set to **Enabled** (User scope), directly mirroring the GPO desktop lockdown functionality.
+* **Verification:** User interface elements related to changing the desktop theme were confirmed to be greyed out, restricting user modification.
+
+<img width="1000" height="800" alt="Screenshot of Windows 11 client showing Personalization settings greyed out due to Intune policy" src=""/>
+
+---
+
+### **17. Application Management: Simple Device-Level Deployment (Microsoft To Do)** 💾
+
+To demonstrate Intune's software distribution capability (the replacement for the GPO software deployment in Section 10), the **Microsoft To Do** application was deployed using the simplified **Microsoft Store app (new)** method.
+
+#### **A. Microsoft Store App Configuration**
+
+* **Application:** Microsoft To Do
+* **App Category:** **Productivity** (For Company Portal organization).
+* **Install Context:** **System** (Ensures machine-level installation, independent of the user).
+* **Assignment:** The app was assigned as **Required** to the **`Client Devices`** security group (containing device objects).
+
+#### **B. Verification**
+
+The application installed silently and automatically onto both client devices following a successful Intune sync. The Intune portal reported an **"Installed"** status, confirming the cloud-native software distribution pipeline is fully functional.
+
+<img width="800" height="400" alt="Screenshot of Windows 11 client showing Microsoft To Do installed in the Start Menu" src=""/>
+
+---
+
+### **18. Conditional Access: Enforcing Zero Trust** 🔒
+
+This final step integrates the Intune Compliance status with **Microsoft Entra Conditional Access** to enforce a security gate, demonstrating a fully managed, Zero Trust environment.
+
+#### **A. Conditional Access Policy Configuration**
+
+A policy was created to restrict access to Microsoft 365 services based on the device's Intune Compliance status.
+
+* **Policy Name:** `CA_01_Require_Compliant_Device`
+* **Assignments:** Targeted the **`Test Users`** group and the **Office 365** cloud application.
+* **Access Controls (Grant):** Set to **Require device to be marked as compliant** for Windows platforms.
+
+<img width="1200" height="700" alt="Screenshot of the Conditional Access Policy set to require compliant device" src=""/>
+
+#### **B. Verification of Access Control**
+
+The success of the entire project is confirmed by testing access under both compliant and non-compliant states:
+
+| Device | Policy Status | Access Attempt | Result |
+| :--- | :--- | :--- | :--- |
+| **Windows1** | **Compliant** | `TestUser1` signs in to Outlook. | **✅ Access Granted.** All Intune security requirements were met. |
+| **Windows2** | **Non-Compliant** | Firewall intentionally disabled. `TestUser2` signs in to Outlook. | **❌ Access Blocked.** The device failed the Intune check, and the CA policy denied access, protecting corporate data. |
+
+<img width="800" height="400" alt="Screenshot of the access blocked message shown to the user on the non-compliant device" src=""/>
+
+---
+
+## **Conclusion** 🎉
+
+The project successfully established a comprehensive **Hybrid Identity and Endpoint Management** solution. All goals were achieved: Hybrid Entra ID join, cloud co-management via Intune, replacement of legacy GPO software and policy management, and the final enforcement of a security baseline using **Conditional Access**. This demonstrates end-to-end expertise in building and securing a modern, cloud-first IT environment.
