@@ -216,7 +216,7 @@ The Entra Connect configuration was extended to enable **Hybrid Entra ID Join (H
 * **Group Writeback:** Confirmed the writeback feature was enabled and successfully synchronized groups created in Entra ID back to the on-premises Active Directory.
 * **Device Verification:**
     * After an AD synchronization cycle and client restart, both **`Windows1`** and **`Windows2`** successfully registered their identity with Entra ID.
-    * Devices appeared in the Microsoft Entra admin center with a **Join Type** of **"Hybrid Azure AD Joined"**.
+    * Devices appeared in the Microsoft Entra admin center with a **Join Type** of **"Microsoft Entra Hybrid Joined"**.
 
 
 <img width="1117" height="622" alt="Screenshot 2025-11-17 064911" src="https://github.com/user-attachments/assets/e299e0cf-73f8-4608-8a69-b00cda5c30a7" />
