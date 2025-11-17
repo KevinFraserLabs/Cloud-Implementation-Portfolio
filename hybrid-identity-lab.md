@@ -271,7 +271,8 @@ This section confirms the successful automatic enrollment of the client devices 
     * The **Primary user** is correctly listed as the signed-in user (**`TestUser1`** or **`TestUser2`**).
     * The **Compliance** status is **"Compliant"**.
 
-<img width="735" height="220" alt="Screenshot 2025-11-17 070319" src="https://github.com/user-attachments/assets/f8c19b3a-894f-4400-954a-b888cabf8632" />
+<img width="1882" height="540" alt="Screenshot 2025-11-17 070445" src="https://github.com/user-attachments/assets/603016ce-e76a-4c9c-84f6-39986f10eff6" />
 
+<img width="1826" height="609" alt="Screenshot 2025-11-17 071739" src="https://github.com/user-attachments/assets/dfe3bca9-9365-46f0-8f51-e58d58bc1375" />
 
 
