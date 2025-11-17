@@ -285,17 +285,22 @@ To ensure clean and precise policy targeting, administrative **Security Groups**
 * **Device Group:** **`Client Devices`** (Used for policies targeting the machine, containing device objects `Windows1`and `Windows2`).
 * **User Group:** **`Users`** (Created specifically for assigning user-centric policies, containing user objects like `TestUser1` and `TestUser2`).
 
+<img width="1317" height="479" alt="Screenshot 2025-11-17 083718" src="https://github.com/user-attachments/assets/e8a742f2-839f-4da3-922d-9ecbef615fcf" />
+<img width="1257" height="439" alt="Screenshot 2025-11-17 083731" src="https://github.com/user-attachments/assets/3bd5c106-15e4-4297-9824-51c3d3205e99" />
+<img width="1254" height="523" alt="Screenshot 2025-11-17 083752" src="https://github.com/user-attachments/assets/43c6c56f-e198-4418-b631-fe34b11573a7" />
+
+
 ---
 
 ### **16. Cloud-Native Security Baseline and Configuration** 🛡️
 
 With the client devices fully MDM-managed, governance was migrated from GPOs to Intune-deployed policies.
 
-#### **A. Intune Device Compliance Policy (Security Baseline)**
+#### **Intune Device Compliance Policy (Security Baseline)**
 
 A robust compliance policy was implemented, assigned to the **`Client Devices`** security group, to enforce a multi-layered Zero Trust security baseline.
 
-* **Policy Name:** `Security_Baseline_Workstations`
+* **Policy Name:** `Default Device Compliance Policy`
 * **Assignment:** Targeted the **`Client Devices`** security group (containing device objects).
 * **Key Requirements Enforced (All set to 'Require'):**
     * **Hardware Integrity (Device Health):** `Secure Boot` and `Code Integrity` to ensure a trusted boot environment.
@@ -306,37 +311,32 @@ A robust compliance policy was implemented, assigned to the **`Client Devices`**
 * **Action for Non-Compliance:** Configured to immediately mark the device non-compliant and **send an email notification** to the end-user.
 * **Verification:** The devices reported **"Compliant"** in the Intune admin center.
 
-<img width="1200" height="700" alt="Screenshot of Intune Compliance Policy requiring all security settings" src=""/>
+<img width="489" height="732" alt="Screenshot 2025-11-17 090939" src="https://github.com/user-attachments/assets/91b18624-5e71-4b9b-add2-7e10a4444ed9" />
+<img width="442" height="446" alt="Screenshot 2025-11-17 090947" src="https://github.com/user-attachments/assets/f0e5c964-b107-486b-97f3-2bce3f213417" />
+<img width="426" height="689" alt="Screenshot 2025-11-17 091124" src="https://github.com/user-attachments/assets/c3990ecc-698f-42c7-bd82-cc4ce0ae7a18" />
 
-#### **B. Intune Configuration Profile (GPO Replacement)**
-
-A Configuration Profile using the **Settings Catalog** was deployed to demonstrate the replacement of traditional GPOs with cloud-native policy management.
-
-* **Policy Name:** `Config_User_Desktop_Lockdown`
-* **Assignment:** Targeted the **`Test Users`** security group (containing user objects).
-* **Key Setting:** **Prevent changing theme** was set to **Enabled** (User scope), directly mirroring the GPO desktop lockdown functionality.
-* **Verification:** User interface elements related to changing the desktop theme were confirmed to be greyed out, restricting user modification.
-
-<img width="1000" height="800" alt="Screenshot of Windows 11 client showing Personalization settings greyed out due to Intune policy" src=""/>
 
 ---
 
 ### **17. Application Management: Simple Device-Level Deployment (Microsoft To Do)** 💾
 
-To demonstrate Intune's software distribution capability (the replacement for the GPO software deployment in Section 10), the **Microsoft To Do** application was deployed using the simplified **Microsoft Store app (new)** method.
+To demonstrate Intune's software distribution capability, the **Microsoft To Do** application was deployed using the simplified **Microsoft Store app (new)** method.
 
 #### **A. Microsoft Store App Configuration**
 
 * **Application:** Microsoft To Do
-* **App Category:** **Productivity** (For Company Portal organization).
+* **App Category:** **Productivity**
 * **Install Context:** **System** (Ensures machine-level installation, independent of the user).
 * **Assignment:** The app was assigned as **Required** to the **`Client Devices`** security group (containing device objects).
 
+<img width="1294" height="765" alt="Screenshot 2025-11-17 084842" src="https://github.com/user-attachments/assets/86d4eb19-05c4-4ab6-9fd1-969547cc8017" />
+
 #### **B. Verification**
 
-The application installed silently and automatically onto both client devices following a successful Intune sync. The Intune portal reported an **"Installed"** status, confirming the cloud-native software distribution pipeline is fully functional.
+The application installed silently and automatically onto both client devices following a successful Intune sync. 
 
-<img width="800" height="400" alt="Screenshot of Windows 11 client showing Microsoft To Do installed in the Start Menu" src=""/>
+
+<img width="895" height="533" alt="Screenshot 2025-11-17 085413" src="https://github.com/user-attachments/assets/24e80d99-5712-4e1d-8895-cbe35e42d6ff" />
 
 ---
 
@@ -348,11 +348,12 @@ This final step integrates the Intune Compliance status with **Microsoft Entra C
 
 A policy was created to restrict access to Microsoft 365 services based on the device's Intune Compliance status.
 
-* **Policy Name:** `CA_01_Require_Compliant_Device`
+* **Policy Name:** `Conditional Access Require Compliant Device`
 * **Assignments:** Targeted the **`Test Users`** group and the **Office 365** cloud application.
 * **Access Controls (Grant):** Set to **Require device to be marked as compliant** for Windows platforms.
 
-<img width="1200" height="700" alt="Screenshot of the Conditional Access Policy set to require compliant device" src=""/>
+<img width="1268" height="715" alt="Screenshot 2025-11-17 081855" src="https://github.com/user-attachments/assets/4cb99fa4-7521-45a5-9e2d-2458328a6b64" />
+
 
 #### **B. Verification of Access Control**
 
@@ -363,10 +364,10 @@ The success of the entire project is confirmed by testing access under both comp
 | **Windows1** | **Compliant** | `TestUser1` signs in to Outlook. | **✅ Access Granted.** All Intune security requirements were met. |
 | **Windows2** | **Non-Compliant** | Firewall intentionally disabled. `TestUser2` signs in to Outlook. | **❌ Access Blocked.** The device failed the Intune check, and the CA policy denied access, protecting corporate data. |
 
-<img width="800" height="400" alt="Screenshot of the access blocked message shown to the user on the non-compliant device" src=""/>
+Add proof of this here!!!
 
 ---
 
 ## **Conclusion** 🎉
 
-The project successfully established a comprehensive **Hybrid Identity and Endpoint Management** solution. All goals were achieved: Hybrid Entra ID join, cloud co-management via Intune, replacement of legacy GPO software and policy management, and the final enforcement of a security baseline using **Conditional Access**. This demonstrates end-to-end expertise in building and securing a modern, cloud-first IT environment.
+The project successfully established a comprehensive **Hybrid Identity and Endpoint Management** solution. All goals were achieved: Hybrid Entra ID join, cloud co-management via Intune, replacement of legacy GPO software and policy management, and the final enforcement of a security baseline using **Conditional Access**. 
