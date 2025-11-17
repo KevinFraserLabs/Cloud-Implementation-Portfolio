@@ -338,6 +338,9 @@ The application installed silently and automatically onto both client devices fo
 
 <img width="895" height="533" alt="Screenshot 2025-11-17 085413" src="https://github.com/user-attachments/assets/24e80d99-5712-4e1d-8895-cbe35e42d6ff" />
 
+<img width="1651" height="344" alt="Screenshot 2025-11-17 093532" src="https://github.com/user-attachments/assets/3f7ef199-3655-4756-819d-ae20ce14ad21" />
+
+
 ---
 
 ### **18. Conditional Access: Enforcing Zero Trust** 🔒
@@ -354,19 +357,27 @@ A policy was created to restrict access to Microsoft 365 services based on the d
 
 <img width="1268" height="715" alt="Screenshot 2025-11-17 081855" src="https://github.com/user-attachments/assets/4cb99fa4-7521-45a5-9e2d-2458328a6b64" />
 
+#### **B. Conditional Access Policy Confirmation**
 
-#### **B. Verification of Access Control**
+Windows2 had Firewall disabled so it would fail compliance resulting in blocked access on the Microsoft365 Copilot App.
 
-The success of the entire project is confirmed by testing access under both compliant and non-compliant states:
+<img width="1679" height="619" alt="Screenshot 2025-11-17 094540" src="https://github.com/user-attachments/assets/28afe6de-2910-41b6-90b3-a2b8654d94a5" />
 
-| Device | Policy Status | Access Attempt | Result |
-| :--- | :--- | :--- | :--- |
-| **Windows1** | **Compliant** | `TestUser1` signs in to Outlook. | **✅ Access Granted.** All Intune security requirements were met. |
-| **Windows2** | **Non-Compliant** | Firewall intentionally disabled. `TestUser2` signs in to Outlook. | **❌ Access Blocked.** The device failed the Intune check, and the CA policy denied access, protecting corporate data. |
+<img width="1016" height="710" alt="Screenshot 2025-11-17 095939" src="https://github.com/user-attachments/assets/a95e0765-19eb-4337-a29d-fdd7de9e1fb9" />
 
-Add proof of this here!!!
+<img width="1002" height="685" alt="Screenshot 2025-11-17 100649" src="https://github.com/user-attachments/assets/e3a158ed-913b-4842-a737-373a3334fbb2" />
+<img width="838" height="530" alt="Screenshot 2025-11-17 100716" src="https://github.com/user-attachments/assets/b0debdd0-6186-4b4c-b10a-4fab18646f6b" />
 
----
+Once the Firewall was enabled, the device was no longer non compliant and was able to gain access.
+
+<img width="996" height="587" alt="Screenshot 2025-11-17 100856" src="https://github.com/user-attachments/assets/0aaa57fd-33bf-4f62-9a55-10ae3466f886" />
+
+<img width="987" height="658" alt="Screenshot 2025-11-17 100939" src="https://github.com/user-attachments/assets/1775094d-e335-49c7-8b87-127047f75e2e" />
+
+And both Devices were now compliant on Intune.
+
+<img width="1687" height="629" alt="Screenshot 2025-11-17 101135" src="https://github.com/user-attachments/assets/0f1e7c3b-7b58-42c7-b8b0-bd5ea19856f1" />
+
 
 ## **Conclusion** 🎉
 
